@@ -3,16 +3,21 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import storeAuth from "../../context/storeAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import GatoImage from "../../assets/estudios.jpg";
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Detectar tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize(); // detectar al cargar
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { setToken, setId, setUserName, setRol, token } = storeAuth();
   const navigate = useNavigate();
 
@@ -26,25 +31,18 @@ const Login = () => {
         "https://gestionmatriculas-production.up.railway.app/api/usuarios/login",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: data.email,
-            password: data.password,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: data.email, password: data.password }),
         }
       );
 
       const result = await response.json();
 
       if (response.ok) {
-        // Guardamos en storeAuth
         setToken(result.token);
         setId(result.usuario.id);
         setUserName(result.usuario.nombre);
-        setRol(result.usuario.rol); // opcional
-
+        setRol(result.usuario.rol);
         toast.success(result.msg || "¡Bienvenido!");
         setTimeout(() => navigate("/dashboard"), 1000);
       } else {
@@ -57,9 +55,9 @@ const Login = () => {
   };
 
   return (
-    <div style={container}>
+    <div style={{ ...container, flexDirection: isMobile ? "column" : "row" }}>
       <ToastContainer />
-      <div style={loginBox}>
+      <div style={{ ...loginBox, width: isMobile ? "90%" : "50%" }}>
         <h2 style={title}>Hola de nuevo</h2>
         <p style={subtitle}>Ingresa tus datos para continuar con tu cuenta.</p>
         <form onSubmit={handleSubmit(loginUser)} style={formStyle}>
@@ -81,22 +79,22 @@ const Login = () => {
           />
           {errors.password && <p style={errorText}>{errors.password.message}</p>}
 
-          <button type="submit" style={buttonStyle}>
-            Iniciar sesión
-          </button>
+          <button type="submit" style={buttonStyle}>Iniciar sesión</button>
         </form>
       </div>
 
-      <div style={imageBox}>
-        <img src={GatoImage} alt="Estudios" style={imageStyle} />
-      </div>
+      {!isMobile && (
+        <div style={imageBox}>
+          <img src={GatoImage} alt="Estudios" style={imageStyle} />
+        </div>
+      )}
 
       <div style={animatedBackground}></div>
     </div>
   );
 };
 
-// --- Estilos ---
+// --- Estilos (igual que antes, no cambian) ---
 const container = {
   display: "flex",
   height: "100vh",
@@ -108,7 +106,6 @@ const container = {
 
 const loginBox = {
   zIndex: 2,
-  width: "50%",
   height: "100%",
   padding: "3rem",
   borderRadius: "0",
@@ -139,65 +136,14 @@ const imageStyle = {
   borderRadius: "0",
 };
 
-const title = {
-  fontSize: "2rem",
-  marginBottom: "0.5rem",
-  textAlign: "center",
-  width: "100%",
-};
-
-const subtitle = {
-  fontSize: "0.9rem",
-  marginBottom: "2rem",
-  color: "#ddd",
-  textAlign: "center",
-  width: "100%",
-};
-
-const formStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "1rem",
-  width: "80%",
-};
-
+const title = { fontSize: "2rem", marginBottom: "0.5rem", textAlign: "center", width: "100%" };
+const subtitle = { fontSize: "0.9rem", marginBottom: "2rem", color: "#ddd", textAlign: "center", width: "100%" };
+const formStyle = { display: "flex", flexDirection: "column", gap: "1rem", width: "80%" };
 const label = { fontWeight: 600 };
-
-const inputStyle = {
-  padding: "0.8rem",
-  borderRadius: "0",
-  border: "none",
-  outline: "none",
-  background: "rgba(255,255,255,0.2)",
-  color: "#fff",
-};
-
-const buttonStyle = {
-  padding: "0.8rem",
-  borderRadius: "0",
-  border: "none",
-  background: "#AA4A44",
-  color: "#fff",
-  fontWeight: 600,
-  cursor: "pointer",
-  marginTop: "1rem",
-  transition: "0.3s",
-};
-
+const inputStyle = { padding: "0.8rem", borderRadius: "0", border: "none", outline: "none", background: "rgba(255,255,255,0.2)", color: "#fff" };
+const buttonStyle = { padding: "0.8rem", borderRadius: "0", border: "none", background: "#AA4A44", color: "#fff", fontWeight: 600, cursor: "pointer", marginTop: "1rem", transition: "0.3s" };
 const errorText = { color: "#ff6b6b", fontSize: "0.8rem" };
-
-const animatedBackground = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  background:
-    "linear-gradient(-45deg, #FFA500, #360c27ff, #2B2D42, #3e4b83ff)",
-  backgroundSize: "400% 400%",
-  animation: "gradient 15s ease infinite",
-  zIndex: 1,
-};
+const animatedBackground = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(-45deg, #FFA500, #360c27ff, #2B2D42, #3e4b83ff)", backgroundSize: "400% 400%", animation: "gradient 15s ease infinite", zIndex: 1 };
 
 const styleSheet = document.styleSheets[0];
 const keyframes = `
