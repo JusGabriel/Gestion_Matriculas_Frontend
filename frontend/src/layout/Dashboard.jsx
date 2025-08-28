@@ -114,7 +114,7 @@ const Dashboard = () => {
       <div style={{
         ...mainContainer,
         marginLeft: isMobile ? 0 : collapsed ? "80px" : "240px",
-        marginTop: isMobile ? "60px" : 0
+        marginTop: isMobile ? "100px" : 0  // <-- header ahora queda debajo del sidebar en móviles
       }}>
         <header style={headerStyle}>
           <h1 style={welcomeStyle}>Bienvenido - {userName || "Usuario"}</h1>
@@ -157,7 +157,6 @@ const sidebarStyle = {
   transition: "width 0.3s ease",
 };
 
-// resto de estilos se mantienen igual...
 const sidebarTitle = {
   textAlign: "center",
   marginBottom: "1.5rem",
