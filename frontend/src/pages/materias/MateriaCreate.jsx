@@ -53,11 +53,53 @@ const MateriaCreate = () => {
         <h2 style={title}>Registrar Materia</h2>
         <form onSubmit={handleSubmit(createMateria)} style={formStyle}>
           <div style={row}>
-            <InputField label="Nombre" name="nombre" register={register} required errors={errors} />
-            <InputField label="Código" name="codigo" register={register} required errors={errors} />
+            <InputField
+              label="Nombre"
+              name="nombre"
+              register={register}
+              required
+              errors={errors}
+              validation={{
+                required: "Nombre es obligatorio",
+                minLength: { value: 2, message: "Nombre demasiado corto" },
+              }}
+            />
+            <InputField
+              label="Código"
+              name="codigo"
+              register={register}
+              required
+              errors={errors}
+              validation={{
+                required: "Código es obligatorio",
+                pattern: { value: /^[A-Z0-9]+$/, message: "Código inválido" },
+              }}
+            />
           </div>
-          <InputField label="Descripción" name="descripcion" register={register} required errors={errors} />
-          <InputField label="Créditos" name="creditos" type="number" register={register} required errors={errors} />
+          <InputField
+            label="Descripción"
+            name="descripcion"
+            register={register}
+            required
+            errors={errors}
+            validation={{
+              required: "Descripción es obligatoria",
+              minLength: { value: 5, message: "Descripción demasiado corta" },
+            }}
+          />
+          <InputField
+            label="Créditos"
+            name="creditos"
+            type="number"
+            register={register}
+            required
+            errors={errors}
+            validation={{
+              required: "Créditos son obligatorios",
+              min: { value: 1, message: "Debe ser al menos 1 crédito" },
+              max: { value: 20, message: "No puede exceder 20 créditos" },
+            }}
+          />
 
           <button type="submit" style={buttonStyle}>
             <FaSave style={{ marginRight: "8px" }} /> Guardar
@@ -68,14 +110,13 @@ const MateriaCreate = () => {
   );
 };
 
-// Componente reutilizable para input
-const InputField = ({ label, name, type = "text", register, required = false, errors }) => (
-  <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+const InputField = ({ label, name, type = "text", register, required = false, errors, validation }) => (
+  <div style={inputContainer}>
     <label style={labelStyle}>{label}</label>
     <input
       type={type}
       placeholder={label}
-      {...register(name, required ? { required: `${label} es obligatorio` } : {})}
+      {...register(name, required ? { required: `${label} es obligatorio`, ...validation } : validation)}
       style={inputStyle}
     />
     {errors?.[name] && <p style={errorText}>{errors[name].message}</p>}
@@ -105,7 +146,19 @@ const formWrapper = {
 
 const title = { marginBottom: "2rem", fontSize: "2rem", textAlign: "center", color: "#525b6d" };
 const formStyle = { display: "flex", flexDirection: "column", gap: "1.8rem" };
-const row = { display: "flex", gap: "1rem", flexWrap: "wrap" };
+
+const row = {
+  display: "flex",
+  gap: "1rem",
+  flexWrap: "wrap",
+};
+
+const inputContainer = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "150px",
+};
 
 const labelStyle = { marginBottom: "0.5rem", fontWeight: "600", color: "#525b6d" };
 const inputStyle = {
@@ -116,6 +169,7 @@ const inputStyle = {
   color: "#1E1E2F",
   fontSize: "1.1rem",
   transition: "0.2s",
+  width: "100%",
 };
 
 const buttonStyle = {
@@ -135,5 +189,8 @@ const buttonStyle = {
 buttonStyle[':hover'] = { background: "#434b5a" };
 
 const errorText = { color: "#E04A4A", fontSize: "0.9rem", marginTop: "0.3rem" };
+
+const mediaQuery = "@media (max-width: 600px)";
+row[mediaQuery] = { flexDirection: "column" };
 
 export default MateriaCreate;
