@@ -2,16 +2,17 @@
 import storeAuth from "../context/storeAuth";
 
 const Home = () => {
-  const { userName } = storeAuth(); // obtener el nombre del usuario
+  const { userName } = storeAuth();
 
   return (
     <div style={homeContainer}>
-      <h1 style={line1Style}>Sistema Académico</h1>
-      <h2 style={line2Style}>Gestión de Estudiantes</h2>
+      <h1 style={line1Style}>Sistema de Gestión de Rentas de Carros</h1>
+      <h2 style={line2Style}>Administración de Vehículos y Reservas</h2>
       <p style={descriptionStyle}>
-        Este sistema permite gestionar estudiantes, materias y matrículas de manera eficiente. 
-        Puedes navegar por los módulos desde el panel lateral y realizar todas las operaciones de 
-        creación, edición y eliminación.
+        Este sistema permite gestionar de manera eficiente los vehículos disponibles, 
+        los clientes y las reservas de renta. Desde el panel lateral podrás navegar por 
+        los diferentes módulos y realizar operaciones como registrar, editar o eliminar 
+        autos, clientes y contratos de alquiler.
       </p>
     </div>
   );
@@ -82,3 +83,4 @@ if (![...styleSheet.cssRules].some((r) => r.name === "fadeIn")) {
 }
 
 export default Home;
+
