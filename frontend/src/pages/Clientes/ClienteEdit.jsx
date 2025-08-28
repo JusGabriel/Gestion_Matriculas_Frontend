@@ -1,4 +1,4 @@
-// src/pages/estudiantes/EstudianteEdit.jsx
+// src/pages/cliente/ClienteEdit.jsx
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { FaSave } from "react-icons/fa";
 import storeAuth from "../../context/storeAuth";
 import axios from "axios";
 
-const EstudianteEdit = () => {
+const ClienteEdit = () => {
   const { id } = useParams();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const { token } = storeAuth();
@@ -16,41 +16,41 @@ const EstudianteEdit = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEstudiante = async () => {
+    const fetchCliente = async () => {
       try {
         const response = await axios.get(
           "https://gestionmatriculas-production.up.railway.app/api/estudiantes",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        const estudiante = response.data.find(e => e._id === id);
-        if (!estudiante) {
-          toast.error("Estudiante no encontrado");
-          navigate("/dashboard/estudiantes");
+        const cliente = response.data.find(e => e._id === id);
+        if (!cliente) {
+          toast.error("Cliente no encontrado");
+          navigate("/dashboard/Clientes");
           return;
         }
 
         // Llenar formulario
-        setValue("nombre", estudiante.nombre);
-        setValue("apellido", estudiante.apellido);
-        setValue("fecha_nacimiento", estudiante.fecha_nacimiento?.split("T")[0] || "");
-        setValue("cedula", estudiante.cedula || "");
-        setValue("ciudad", estudiante.ciudad || "");
-        setValue("direccion", estudiante.direccion || "");
-        setValue("telefono", estudiante.telefono || "");
-        setValue("email", estudiante.email || "");
+        setValue("nombre", cliente.nombre);
+        setValue("apellido", cliente.apellido);
+        setValue("fecha_nacimiento", cliente.fecha_nacimiento?.split("T")[0] || "");
+        setValue("cedula", cliente.cedula || "");
+        setValue("ciudad", cliente.ciudad || "");
+        setValue("direccion", cliente.direccion || "");
+        setValue("telefono", cliente.telefono || "");
+        setValue("email", cliente.email || "");
 
         setLoading(false);
       } catch (error) {
-        toast.error("Error al cargar datos del estudiante");
+        toast.error("Error al cargar datos del cliente");
         console.error(error);
       }
     };
 
-    fetchEstudiante();
+    fetchCliente();
   }, [id, token, setValue, navigate]);
 
-  const updateEstudiante = async (data) => {
+  const updateCliente = async (data) => {
     try {
       await axios.put(
         `https://gestionmatriculas-production.up.railway.app/api/estudiantes/${id}`,
@@ -58,22 +58,22 @@ const EstudianteEdit = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      toast.success("Estudiante actualizado con éxito");
-      setTimeout(() => navigate("/dashboard/estudiantes"), 1500);
+      toast.success("Cliente actualizado con éxito");
+      setTimeout(() => navigate("/dashboard/clientes"), 1500);
     } catch (error) {
       toast.error("Ocurrió un error al actualizar");
       console.error(error);
     }
   };
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: "2rem" }}>Cargando estudiante...</p>;
+  if (loading) return <p style={{ textAlign: "center", marginTop: "2rem" }}>Cargando cliente...</p>;
 
   return (
     <div style={container}>
       <ToastContainer />
       <div style={formWrapper}>
-        <h2 style={title}>Editar Estudiante</h2>
-        <form onSubmit={handleSubmit(updateEstudiante)} style={formStyle}>
+        <h2 style={title}>Editar Cliente</h2>
+        <form onSubmit={handleSubmit(updateCliente)} style={formStyle}>
           <input type="text" placeholder="Nombre" {...register("nombre", { required: "El nombre es obligatorio" })} style={inputStyle} />
           {errors.nombre && <p style={errorText}>{errors.nombre.message}</p>}
 
