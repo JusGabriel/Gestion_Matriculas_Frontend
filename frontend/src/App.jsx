@@ -5,20 +5,20 @@ import Login from "./pages/auth/Login";
 import Dashboard from "./layout/Dashboard";
 import Home from "./pages/Home"; // ← agregada
 
-// Estudiantes
-import EstudiantesList from "./pages/estudiantes/EstudiantesList";
-import EstudianteCreate from "./pages/estudiantes/EstudianteCreate";
-import EstudianteEdit from "./pages/estudiantes/EstudianteEdit";
+// Clientes
+import ClientesList from "./pages/clientes/ClientesList";
+import ClienteCreate from "./pages/clientes/ClienteCreate";
+import ClienteEdit from "./pages/clientes/ClienteEdit";
 
-// Materias
-import MateriasList from "./pages/materias/MateriasList";
-import MateriaCreate from "./pages/materias/MateriaCreate";
-import MateriaEdit from "./pages/materias/MateriaEdit";
+// Reservas
+import ReservasList from "./pages/reservas/ReservasList";
+import ReservaCreate from "./pages/reservas/ReservaCreate";
+import ReservaEdit from "./pages/reservas/ReservaEdit";
 
-// Matrículas
-import MatriculasList from "./pages/matriculas/MatriculasList";
-import MatriculaCreate from "./pages/matriculas/MatriculaCreate";
-import MatriculaEdit from "./pages/matriculas/MatriculaEdit";
+// Vehiculos
+import VehiculosList from "./pages/Vehiculos/VehiculosList";
+import VehiculoCreate from "./pages/Vehiculos/VehiculoCreate";
+import VehiculoEdit from "./pages/Vehiculos/VehiculoEdit";
 
 import PublicRoute from "./routers/PublicRoute";
 import ProtectedRoute from "./routers/ProtectedRoute";
@@ -39,20 +39,20 @@ function App() {
         <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} >
           <Route index element={<Home />} /> {/* ← agregada */}
 
-          {/* Estudiantes */}
-          <Route path="estudiantes" element={<EstudiantesList />} />
-          <Route path="estudiantes/create" element={<EstudianteCreate />} />
-          <Route path="estudiantes/edit/:id" element={<EstudianteEdit />} />
+          {/* Clientes */}
+          <Route path="clientes" element={<ClientesList />} />
+          <Route path="clientes/create" element={<ClienteCreate />} />
+          <Route path="clientes/edit/:id" element={<ClienteEdit />} />
 
-          {/* Materias */}
-          <Route path="materias" element={<MateriasList />} />
-          <Route path="materias/create" element={<MateriaCreate />} />
-          <Route path="materias/edit/:id" element={<MateriaEdit />} />
+          {/* Vehiculos */}
+          <Route path="vehiculos" element={<VehiculosList />} />
+          <Route path="vehiculos/create" element={<VehiculoCreate />} />
+          <Route path="vehiculos/edit/:id" element={<VehiculoEdit />} />
 
-          {/* Matrículas */}
-          <Route path="matriculas" element={<MatriculasList />} />
-          <Route path="matriculas/create" element={<MatriculaCreate />} />
-          <Route path="matriculas/edit/:id" element={<MatriculaEdit />} />
+          {/* Reservas */}
+          <Route path="reservas" element={<ReservasList />} />
+          <Route path="reservas/create" element={<ReservaCreate />} />
+          <Route path="reservas/edit/:id" element={<ReservaEdit />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
@@ -62,4 +62,5 @@ function App() {
 }
 
 export default App;
+
 
