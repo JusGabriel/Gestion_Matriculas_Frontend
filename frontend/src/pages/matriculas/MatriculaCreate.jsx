@@ -85,7 +85,10 @@ const MatriculaCreate = () => {
             <input
               type="number"
               placeholder="Código de la matrícula"
-              {...register("codigo", { required: "El código es obligatorio" })}
+              {...register("codigo", {
+                required: "El código es obligatorio",
+                min: { value: 1, message: "Código inválido" },
+              })}
               style={inputStyle}
             />
             {errors.codigo && <p style={errorText}>{errors.codigo.message}</p>}
@@ -96,7 +99,10 @@ const MatriculaCreate = () => {
             <input
               type="text"
               placeholder="Descripción de la matrícula"
-              {...register("descripcion", { required: "La descripción es obligatoria" })}
+              {...register("descripcion", {
+                required: "La descripción es obligatoria",
+                minLength: { value: 5, message: "Descripción demasiado corta" },
+              })}
               style={inputStyle}
             />
             {errors.descripcion && <p style={errorText}>{errors.descripcion.message}</p>}
@@ -143,7 +149,7 @@ const MatriculaCreate = () => {
   );
 };
 
-// --- Estilos ---
+//Estilos 
 const container = {
   minHeight: "100vh",
   display: "flex",
