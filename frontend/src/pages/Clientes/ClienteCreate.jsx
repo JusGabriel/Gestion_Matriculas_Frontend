@@ -6,12 +6,12 @@ import storeAuth from "../../context/storeAuth";
 import { FaSave } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 
-const EstudianteCreate = () => {
+const ClienteCreate = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { token } = storeAuth();
   const navigate = useNavigate();
 
-  const createEstudiante = async (data) => {
+  const createCliente = async (data) => {
     try {
       const response = await fetch("https://gestionmatriculas-production.up.railway.app/api/estudiantes", {
         method: "POST",
@@ -34,12 +34,12 @@ const EstudianteCreate = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.msg || "Error al crear el estudiante");
+        toast.error(result.msg || "Error al crear el cliente");
         return;
       }
 
-      toast.success("Estudiante creado con éxito");
-      setTimeout(() => navigate("/dashboard/estudiantes"), 1500);
+      toast.success("Cliente creado con éxito");
+      setTimeout(() => navigate("/dashboard/cliente"), 1500);
 
     } catch (error) {
       toast.error("Ocurrió un error inesperado");
@@ -51,8 +51,8 @@ const EstudianteCreate = () => {
     <div style={container}>
       <ToastContainer />
       <div style={formWrapper}>
-        <h2 style={title}>Registrar Estudiante</h2>
-        <form onSubmit={handleSubmit(createEstudiante)} style={formStyle}>
+        <h2 style={title}>Registrar Cliente</h2>
+        <form onSubmit={handleSubmit(createCliente)} style={formStyle}>
           <div style={row}>
             <InputField
               label="Nombre"
