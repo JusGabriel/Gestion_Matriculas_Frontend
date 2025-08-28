@@ -9,7 +9,16 @@ const Dashboard = () => {
   const { token, setToken, setId, userName } = storeAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false); // Estado del sidebar
+  const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (!token) navigate("/login");
@@ -29,38 +38,72 @@ const Dashboard = () => {
   ];
 
   return (
-    <div style={dashboardContainer}>
+    <div style={{ ...dashboardContainer, flexDirection: isMobile ? "column" : "row" }}>
       {/* Sidebar */}
-      <aside style={{ ...sidebarStyle, width: collapsed ? "80px" : "240px" }}>
-        <div style={{ display: "flex", justifyContent: collapsed ? "center" : "space-between", alignItems: "center" }}>
-          {!collapsed && <h2 style={sidebarTitle}>CampusOnline</h2>}
-          <button
+      <aside
+        style={{
+          ...sidebarStyle,
+          width: isMobile ? "100%" : collapsed ? "80px" : "240px",
+          height: isMobile ? "auto" : "100vh",
+          flexDirection: isMobile ? "row" : "column",
+          alignItems: isMobile ? "center" : "stretch",
+          justifyContent: isMobile ? "space-around" : "space-between",
+          padding: isMobile ? "0.5rem 0" : "1.5rem 1rem",
+        }}
+      >
+        <div style={{
+          display: "flex",
+          justifyContent: isMobile ? "center" : collapsed ? "center" : "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}>
+          {!collapsed && !isMobile && <h2 style={sidebarTitle}>CampusOnline</h2>}
+          {isMobile && <h2 style={{ ...sidebarTitle, fontSize: "1rem", margin: 0 }}>CampusOnline</h2>}
+          {!isMobile && <button
             onClick={() => setCollapsed(!collapsed)}
             style={{ background: "transparent", border: "none", color: "#fff", fontSize: "1.3rem", cursor: "pointer" }}
           >
             <FaBars />
-          </button>
+          </button>}
         </div>
 
-        <nav style={navListStyle}>
+        <nav style={{
+          ...navListStyle,
+          flexDirection: isMobile ? "row" : "column",
+          gap: isMobile ? "0.5rem" : "0.7rem",
+          overflowY: "visible",
+          justifyContent: isMobile ? "center" : "flex-start",
+          width: "100%",
+        }}>
           {links.map(link => (
             <Link
               key={link.name}
               to={link.path}
               style={{
                 ...linkStyle,
-                justifyContent: collapsed ? "center" : "flex-start",
+                justifyContent: "center",
                 backgroundColor: location.pathname === link.path ? "#374151" : "transparent",
                 fontWeight: location.pathname === link.path ? 600 : 500,
+                flexDirection: "column",
+                padding: isMobile ? "0.3rem 0.5rem" : "0.6rem 1rem",
+                borderRadius: "6px",
               }}
             >
               <span style={iconStyle}>{link.icon}</span>
-              {!collapsed && link.name}
+              {(!collapsed || isMobile) && <span style={{ fontSize: isMobile ? "0.7rem" : "1rem" }}>{link.name}</span>}
             </Link>
           ))}
         </nav>
 
-        <div style={{ ...profileBox, justifyContent: collapsed ? "center" : "space-between" }}>
+        <div style={{
+          ...profileBox,
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: isMobile ? "auto" : "100%",
+          paddingTop: isMobile ? "0" : "1rem",
+          borderTop: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)"
+        }}>
           <FaUserCircle style={profileIcon} />
           {!collapsed && <p style={profileName}>{userName || "Usuario"}</p>}
           <button style={logoutButton} onClick={logout}><FiLogOut /></button>
@@ -68,7 +111,11 @@ const Dashboard = () => {
       </aside>
 
       {/* Contenido principal */}
-      <div style={{ ...mainContainer, marginLeft: collapsed ? "80px" : "240px" }}>
+      <div style={{
+        ...mainContainer,
+        marginLeft: isMobile ? 0 : collapsed ? "80px" : "240px",
+        marginTop: isMobile ? "60px" : 0
+      }}>
         <header style={headerStyle}>
           <h1 style={welcomeStyle}>Bienvenido - {userName || "Usuario"}</h1>
         </header>
@@ -85,7 +132,7 @@ const Dashboard = () => {
   );
 };
 
-// --- Estilos (igual que los tuyos) ---
+// --- Estilos originales se mantienen igual, no se toca nada más ---
 const dashboardContainer = {
   display: "flex",
   minHeight: "100vh",
@@ -95,7 +142,6 @@ const dashboardContainer = {
 };
 
 const sidebarStyle = {
-  padding: "1.5rem 1rem",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -103,7 +149,7 @@ const sidebarStyle = {
   boxShadow: "3px 0 15px rgba(0,0,0,0.2)",
   position: "fixed",
   top: 0,
-  bottom: 0,
+  left: 0,
   overflow: "hidden",
   background: "linear-gradient(-45deg, #FFA500, #360c27ff, #2B2D42, #3e4b83ff)",
   backgroundSize: "400% 400%",
@@ -111,6 +157,7 @@ const sidebarStyle = {
   transition: "width 0.3s ease",
 };
 
+// resto de estilos se mantienen igual...
 const sidebarTitle = {
   textAlign: "center",
   marginBottom: "1.5rem",
