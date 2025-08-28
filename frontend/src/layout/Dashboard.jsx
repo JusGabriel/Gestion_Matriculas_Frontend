@@ -45,33 +45,35 @@ const Dashboard = () => {
           ...sidebarStyle,
           width: isMobile ? "100%" : collapsed ? "80px" : "240px",
           height: isMobile ? "auto" : "100vh",
-          flexDirection: "column",
-          alignItems: "stretch",
-          justifyContent: "flex-start",
+          flexDirection: isMobile ? "row" : "column",
+          alignItems: isMobile ? "center" : "stretch",
+          justifyContent: isMobile ? "space-around" : "space-between",
           padding: isMobile ? "0.5rem 0" : "1.5rem 1rem",
         }}
       >
-        {/* Título */}
         <div style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: isMobile ? "center" : collapsed ? "center" : "space-between",
           alignItems: "center",
           width: "100%",
-          padding: isMobile ? "0.5rem 0" : "0",
         }}>
-          <h2 style={{ ...sidebarTitle, fontSize: isMobile ? "1rem" : "1.45rem", margin: 0 }}>CampusOnline</h2>
+          {!collapsed && !isMobile && <h2 style={sidebarTitle}>CampusOnline</h2>}
+          {isMobile && <h2 style={{ ...sidebarTitle, fontSize: "1rem", margin: 0 }}>CampusOnline</h2>}
+          {!isMobile && <button
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ background: "transparent", border: "none", color: "#fff", fontSize: "1.3rem", cursor: "pointer" }}
+          >
+            <FaBars />
+          </button>}
         </div>
 
-        {/* Links */}
         <nav style={{
-          display: "flex",
+          ...navListStyle,
           flexDirection: isMobile ? "row" : "column",
-          justifyContent: isMobile ? "space-around" : "flex-start",
-          alignItems: "center",
           gap: isMobile ? "0.5rem" : "0.7rem",
+          overflowY: "visible",
+          justifyContent: isMobile ? "center" : "flex-start",
           width: "100%",
-          padding: isMobile ? "0.5rem 0" : "0",
-          overflowX: isMobile ? "auto" : "visible",
         }}>
           {links.map(link => (
             <Link
@@ -88,36 +90,31 @@ const Dashboard = () => {
               }}
             >
               <span style={iconStyle}>{link.icon}</span>
-              <span style={{ fontSize: isMobile ? "0.7rem" : "1rem" }}>{link.name}</span>
+              {(!collapsed || isMobile) && <span style={{ fontSize: isMobile ? "0.7rem" : "1rem" }}>{link.name}</span>}
             </Link>
           ))}
         </nav>
 
-        {/* Perfil y logout (solo móviles) */}
-        {isMobile && (
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.5rem 0",
-            borderTop: "1px solid rgba(255,255,255,0.2)",
-            width: "100%",
-          }}>
-            <FaUserCircle style={{ width: "30px", height: "30px", color: "#fff" }} />
-            <p style={{ margin: 0, fontWeight: 600, color: "#fff" }}>{userName || "Usuario"}</p>
-            <button style={{ ...logoutButton, padding: "0.3rem 0.5rem", fontSize: "0.8rem" }} onClick={logout}>
-              <FiLogOut />
-            </button>
-          </div>
-        )}
+        <div style={{
+          ...profileBox,
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: isMobile ? "auto" : "100%",
+          paddingTop: isMobile ? "0" : "1rem",
+          borderTop: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)"
+        }}>
+          <FaUserCircle style={profileIcon} />
+          {!collapsed && <p style={profileName}>{userName || "Usuario"}</p>}
+          <button style={logoutButton} onClick={logout}><FiLogOut /></button>
+        </div>
       </aside>
 
       {/* Contenido principal */}
       <div style={{
         ...mainContainer,
         marginLeft: isMobile ? 0 : collapsed ? "80px" : "240px",
-        marginTop: isMobile ? "0" : 0
+        marginTop: isMobile ? "100px" : 0  // <-- header ahora queda debajo del sidebar en móviles
       }}>
         <header style={headerStyle}>
           <h1 style={welcomeStyle}>Bienvenido - {userName || "Usuario"}</h1>
