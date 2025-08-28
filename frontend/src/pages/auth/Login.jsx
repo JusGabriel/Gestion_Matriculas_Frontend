@@ -9,7 +9,6 @@ import GatoImage from "../../assets/estudios.jpg";
 const Login = () => {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detectar tamaño de pantalla
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize(); // al cargar
@@ -70,7 +69,7 @@ const Login = () => {
         style={{
           ...loginBox,
           width: isMobile ? "100%" : "50%",
-          height: isMobile ? "100vh" : "100%", // ✅ ocupa toda la pantalla en móvil
+          height: isMobile ? "100vh" : "100%",
         }}
       >
         <h2 style={title}>Hola de nuevo</h2>
@@ -98,7 +97,7 @@ const Login = () => {
             {...register("password", {
               required: "Por favor ingresa tu contraseña",
               minLength: {
-                value: 6,
+                value: 3,
                 message: "La contraseña debe tener al menos 6 caracteres",
               },
             })}
@@ -234,3 +233,4 @@ const keyframes = `
 styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
 export default Login;
+
