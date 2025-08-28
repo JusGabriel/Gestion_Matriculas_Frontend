@@ -23,6 +23,8 @@ import MatriculaEdit from "./pages/matriculas/MatriculaEdit";
 import PublicRoute from "./routers/PublicRoute";
 import ProtectedRoute from "./routers/ProtectedRoute";
 
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <BrowserRouter>
@@ -52,9 +54,12 @@ function App() {
           <Route path="matriculas/create" element={<MatriculaCreate />} />
           <Route path="matriculas/edit/:id" element={<MatriculaEdit />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
