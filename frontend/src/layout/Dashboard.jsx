@@ -32,9 +32,9 @@ const Dashboard = () => {
 
   const links = [
     { name: "Home", path: "/dashboard", icon: <FaHome /> },
-    { name: "Estudiantes", path: "/dashboard/estudiantes", icon: <FaUserGraduate /> },
-    { name: "Materias", path: "/dashboard/materias", icon: <FaBook /> },
-    { name: "Matrículas", path: "/dashboard/matriculas", icon: <FaClipboardList /> },
+    { name: "Clientes", path: "/dashboard/estudiantes", icon: <FaUserGraduate /> },
+    { name: "Vehículos", path: "/dashboard/materias", icon: <FaBook /> },
+    { name: "Reservas", path: "/dashboard/matriculas", icon: <FaClipboardList /> },
   ];
 
   return (
@@ -57,8 +57,8 @@ const Dashboard = () => {
           alignItems: "center",
           width: "100%",
         }}>
-          {!collapsed && !isMobile && <h2 style={sidebarTitle}>CampusOnline</h2>}
-          {isMobile && <h2 style={{ ...sidebarTitle, fontSize: "1rem", margin: 0 }}>CampusOnline</h2>}
+          {!collapsed && !isMobile && <h2 style={sidebarTitle}>RentaFácil</h2>}
+          {isMobile && <h2 style={{ ...sidebarTitle, fontSize: "1rem", margin: 0 }}>RentaFácil</h2>}
           {!isMobile && <button
             onClick={() => setCollapsed(!collapsed)}
             style={{ background: "transparent", border: "none", color: "#fff", fontSize: "1.3rem", cursor: "pointer" }}
@@ -265,3 +265,4 @@ if (![...styleSheet.cssRules].some(r => r.name === "gradient")) {
 }
 
 export default Dashboard;
+
