@@ -1,12 +1,12 @@
-// src/pages/estudiantes/EstudiantesList.jsx
+// src/pages/clientes/ClientesList.jsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaTrash, FaUserPlus } from "react-icons/fa";
 import axios from "axios";
 import storeAuth from "../../context/storeAuth";
 
-export default function EstudiantesList() {
-  const [estudiantes, setEstudiantes] = useState([]);
+export default function ClientesList() {
+  const [clientes, setClientes] = useState([]);
   const { token } = storeAuth();
 
   const headers = {
@@ -17,18 +17,18 @@ export default function EstudiantesList() {
   };
 
   useEffect(() => {
-    const fetchEstudiantes = async () => {
+    const fetchClientes = async () => {
       try {
         const response = await axios.get(
           "https://gestionmatriculas-production.up.railway.app/api/estudiantes",
           headers
         );
-        setEstudiantes(response.data);
+        setClientes(response.data);
       } catch (error) {
-        console.error("Error al obtener estudiantes:", error);
+        console.error("Error al obtener clientes:", error);
       }
     };
-    fetchEstudiantes();
+    fetchClientes();
   }, []);
 
   const handleDelete = async (id) => {
@@ -37,20 +37,20 @@ export default function EstudiantesList() {
         `https://gestionmatriculas-production.up.railway.app/api/estudiantes/${id}`,
         headers
       );
-      setEstudiantes(estudiantes.filter((e) => e._id !== id));
+      setClientes(clientes.filter((e) => e._id !== id));
     } catch (error) {
-      console.error("Error al eliminar estudiante:", error);
+      console.error("Error al eliminar cliente:", error);
     }
   };
 
   return (
     <div style={container}>
-      <h2 style={title}>Lista de Estudiantes</h2>
+      <h2 style={title}>Lista de Clientes</h2>
 
-      <Link to="/dashboard/estudiantes/create">
+      <Link to="/dashboard/clientes/create">
         <button style={addButton}>
           <FaUserPlus style={{ marginRight: "8px" }} />
-          Nuevo Estudiante
+          Nuevo Cliente
         </button>
       </Link>
 
@@ -71,7 +71,7 @@ export default function EstudiantesList() {
               </tr>
             </thead>
             <tbody>
-              {estudiantes.map((e) => (
+              {clientes.map((e) => (
                 <tr key={e._id} style={tr}>
                   <td style={td}>{e.nombre}</td>
                   <td style={td}>{e.apellido}</td>
@@ -82,7 +82,7 @@ export default function EstudiantesList() {
                   <td style={td}>{e.telefono || "-"}</td>
                   <td style={td}>{e.email || "-"}</td>
                   <td style={tdCenter}>
-                    <Link to={`/dashboard/estudiantes/edit/${e._id}`}>
+                    <Link to={`/dashboard/clientes/edit/${e._id}`}>
                       <button style={editButton}><FaEdit /></button>
                     </Link>
                     <button
@@ -94,10 +94,10 @@ export default function EstudiantesList() {
                   </td>
                 </tr>
               ))}
-              {estudiantes.length === 0 && (
+              {clientes.length === 0 && (
                 <tr>
                   <td colSpan="9" style={emptyMessage}>
-                    No hay estudiantes registrados
+                    No hay clientes registrados
                   </td>
                 </tr>
               )}
